@@ -60,7 +60,7 @@ import java.util.Properties;
 public class ActionLogAutoGen {
     public static void main(String[] args) throws InterruptedException {
         Properties props = new Properties();
-        props.setProperty("bootstrap.servers", "hdp01:9092,hdp02:9092,hdp03:9092");
+        props.setProperty("bootstrap.servers", "hadoop102:9092,hadoop103:9092,hadoop104:9092");
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         // 创建多个线程，并行执行
