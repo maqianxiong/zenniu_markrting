@@ -7,11 +7,11 @@
 [root@hdp03 ~]# systemctl status clickhouse-server
 
 #客户端连接
-[root@hdp03 ~]# clickhouse-client -h hdp03 -m
+[root@hdp03 ~]# clickhouse-client -h hadoop102 -m
 ```
 
 ```sql
--- 创建用户行为日志明细表
+-- 创建用户行为日志明细表   允许实验的特性 map
 set allow_experimental_map_type = 1;
 drop table if exists  default.zenniu_detail;
 create table default.zenniu_detail
@@ -62,10 +62,10 @@ create table default.zenniu_detail_kafka
     resolution        String,
     sessionId         String,
     timeStamp         Int64
-) ENGINE = Kafka('hdp01:9092,hdp02:9092,hdp03:9092','zenniu_applog','group1','JSONEachRow')
+) ENGINE = Kafka('hadoop102:9092,hadoop103:9092,hadoop104:9092','zenniu_applog','group1','JSONEachRow')
 ;
 
-
+show tables;
 -- 创建物化视图（桥接kafka引擎表和事件明细表）
 drop view zenniu_view;
 create MATERIALIZED VIEW zenniu_view TO zenniu_detail
@@ -91,5 +91,8 @@ select
     timeStamp
 from zenniu_detail_kafka
 ;
+
+select count(1) from zenniu_detail;
+
 
 ```
