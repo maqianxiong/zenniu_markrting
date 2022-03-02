@@ -94,5 +94,11 @@ from zenniu_detail_kafka
 
 select count(1) from zenniu_detail;
 
+select * from zenniu_detail limit 10;
+
+select distinct eventId from zenniu_detail ;
+
+select eventId , properties from zenniu_detail where eventId='K' limit 10;
+
 
 ```
