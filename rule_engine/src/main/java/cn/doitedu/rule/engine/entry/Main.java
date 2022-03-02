@@ -1,8 +1,12 @@
 package cn.doitedu.rule.engine.entry;
 
-import cn.doitedu.rule.engine.source.KafkaSourceBuilder;
+import cn.doitedu.rule.engine.beans.EventBean;
+import cn.doitedu.rule.engine.beans.RuleMatchResult;
+import cn.doitedu.rule.engine.functions.Json2EventBeanMapFunction;
+import cn.doitedu.rule.engine.functions.KafkaSourceBuilder;
 
 
+import cn.doitedu.rule.engine.functions.RuleMatchKeyedProcessFunction;
 import com.alibaba.fastjson.JSON;
 import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
@@ -32,11 +36,18 @@ public class Main {
         // 读取kafka中的用户行为日志
         KafkaSourceBuilder kafkaSourceBuilder = new KafkaSourceBuilder();
         DataStream<String> dss = env.addSource(kafkaSourceBuilder.build("zenniu_applog"));
-        dss.print();
-        env.execute();
-//        // json解析
-//        DataStream<EventBean> dsBean = dss.map(new Json2EventBeanMapFunction()).filter(e -> e != null);
-//
+
+        // json解析
+        DataStream<EventBean> dsBean = dss.map(new Json2EventBeanMapFunction()).filter(e -> e != null);
+
+        // keyby :按照devideID
+        KeyedStream<EventBean, String> keyed = dsBean.keyBy(bean -> bean.getDeviceId());
+
+        //规则计算
+        SingleOutputStreamOperator<RuleMatchResult> matchResultDS = keyed.process(new RuleMatchKeyedProcessFunction());
+
+
+
 //        // 添加事件时间分配
 //        WatermarkStrategy<EventBean> watermarkStrategy = WatermarkStrategy.<EventBean>forBoundedOutOfOrderness(Duration.ofMillis(0))
 //                .withTimestampAssigner(new SerializableTimestampAssigner<EventBean>() {

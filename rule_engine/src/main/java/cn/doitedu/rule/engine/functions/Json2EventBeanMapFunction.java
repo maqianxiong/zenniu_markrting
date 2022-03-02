@@ -1,0 +1,24 @@
+package cn.doitedu.rule.engine.functions;
+
+import cn.doitedu.rule.engine.beans.EventBean;
+import com.alibaba.fastjson.JSON;
+import org.apache.flink.api.common.functions.MapFunction;
+
+/**
+ * 原始行为日志json解析成bean对象：LogBean
+ *
+ */
+public class Json2EventBeanMapFunction implements MapFunction<String, EventBean> {
+
+
+    @Override
+    public EventBean map(String value) throws Exception {
+        EventBean eventBean = null;
+        try {
+            eventBean = JSON.parseObject(value, EventBean.class);
+        }catch (Exception e){
+
+        }
+        return eventBean;
+    }
+}
