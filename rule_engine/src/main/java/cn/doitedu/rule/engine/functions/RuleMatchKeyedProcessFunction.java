@@ -55,6 +55,7 @@ public class RuleMatchKeyedProcessFunction  extends KeyedProcessFunction<String,
 
     @Override
     public void processElement(EventBean event, Context context, Collector<RuleMatchResult> collector) throws Exception {
+        log.debug("收到一条事件数据：eventID"+ "=" +event.getEventId());
         //获取规则
         RuleConditions rule = RuleMonitor.gerRule();
         //判断当前事件是否是规则定义的触发事件

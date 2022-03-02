@@ -46,6 +46,8 @@ public class Main {
         //规则计算
         SingleOutputStreamOperator<RuleMatchResult> matchResultDS = keyed.process(new RuleMatchKeyedProcessFunction());
         matchResultDS.print();
+
+
         env.execute();
 
 

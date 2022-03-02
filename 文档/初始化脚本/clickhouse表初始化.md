@@ -1,13 +1,13 @@
 - 启动clickhouse服务
 ```shell
 # 启动服务
-[root@hdp03 ~]# systemctl start clickhouse-server
+[root@hdp03 ~]# sudo systemctl start clickhouse-server
 
 # 查看状态
-[root@hdp03 ~]# systemctl status clickhouse-server
+[root@hdp03 ~]# sudo systemctl status clickhouse-server
 
 #客户端连接
-[root@hdp03 ~]# clickhouse-client -h hadoop102 -m
+[root@hdp03 ~]# sudo  clickhouse-client -h hadoop102 -m
 ```
 
 ```sql
@@ -41,7 +41,7 @@ ORDER BY (deviceId,timeStamp)
 ;
 
 -- 创建kafka引擎表
-drop table default.zenniu_detail_kafka;
+drop table if exists default.zenniu_detail_kafka;
 create table default.zenniu_detail_kafka
 (
     account           String   ,
